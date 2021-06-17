@@ -15,67 +15,66 @@
   </head>
 
   <body>
+    
     <div id="gjs" style="height:0px; overflow:hidden;">
-      <div class="panel">
-        <h1 class="welcome">Welcome to</h1>
-        <div class="big-title">
-          <svg class="logo" viewBox="0 0 100 100">
-            <path d="M40 5l-12.9 7.4 -12.9 7.4c-1.4 0.8-2.7 2.3-3.7 3.9 -0.9 1.6-1.5 3.5-1.5 5.1v14.9 14.9c0 1.7 0.6 3.5 1.5 5.1 0.9 1.6 2.2 3.1 3.7 3.9l12.9 7.4 12.9 7.4c1.4 0.8 3.3 1.2 5.2 1.2 1.9 0 3.8-0.4 5.2-1.2l12.9-7.4 12.9-7.4c1.4-0.8 2.7-2.2 3.7-3.9 0.9-1.6 1.5-3.5 1.5-5.1v-14.9 -12.7c0-4.6-3.8-6-6.8-4.2l-28 16.2"/>
-          </svg>
-          <span>GrapesJS</span>
-        </div>
-        <div class="description">
-          This is a demo content from index.html. For the development, you shouldn't edit this file, instead you can
-          copy and rename it to _index.html, on next server start the new file will be served, and it will be ignored by git.
+    
+  
+      <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px;">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+          <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+          <span class="fs-4">Sidebar</span>
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item">
+            <a href="#" class="nav-link active" aria-current="page">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+              Home
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link link-dark">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link link-dark">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+              Orders
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link link-dark">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
+              Products
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link link-dark">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+              Customers
+            </a>
+          </li>
+        </ul>
+        <hr>
+        <div class="dropdown">
+          <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="https://github.com/mdo.png" alt="" class="rounded-circle me-2" width="32" height="32">
+            <strong>mdo</strong>
+          </a>
+          <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+            <li><a class="dropdown-item" href="#">New project...</a></li>
+            <li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Sign out</a></li>
+          </ul>
         </div>
       </div>
-      <style>
-        .panel {
-          width: 90%;
-          max-width: 700px;
-          border-radius: 3px;
-          padding: 30px 20px;
-          margin: 150px auto 0px;
-          background-color: #d983a6;
-          box-shadow: 0px 3px 10px 0px rgba(0,0,0,0.25);
-          color:rgba(255,255,255,0.75);
-          font: caption;
-          font-weight: 100;
-        }
 
-        .welcome {
-          text-align: center;
-          font-weight: 100;
-          margin: 0px;
-        }
 
-        .logo {
-          width: 70px;
-          height: 70px;
-          vertical-align: middle;
-        }
 
-        .logo path {
-          pointer-events: none;
-          fill: none;
-          stroke-linecap: round;
-          stroke-width: 7;
-          stroke: #fff
-        }
-
-        .big-title {
-          text-align: center;
-          font-size: 3.5rem;
-          margin: 15px 0;
-        }
-
-        .description {
-          text-align: justify;
-          font-size: 1rem;
-          line-height: 1.5rem;
-        }
-
-      </style>
     </div>
 
     <script type="text/javascript">
@@ -86,7 +85,17 @@
         height: '100%',
         fromElement: true,
         storageManager: { autoload: 0 },
-        styleManager : {
+        canvas: {
+        styles: [
+        './bootstrap.css'
+        ],
+        scripts: [
+          'https://code.jquery.com/jquery-3.3.1.slim.min.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js',
+          'https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js'
+        ],
+      },
+      styleManager : {
           sectors: [{
               name: 'General',
               open: false,
@@ -116,11 +125,39 @@
         },
       });
 
-      editor.BlockManager.add('testBlock', {
-        label: 'Block',
-        attributes: { class:'gjs-fonts gjs-f-b1' },
-        content: `<div style="padding-top:50px; padding-bottom:50px; text-align:center">Test block</div>`
-      })
+
+    async function getNode(doc){let node=[];let Nstylenode=[];        
+    const getCSSCustomPropIndex =  () => [...doc.styleSheets];let styleSheets=[];let cssRule=[];
+    getCSSCustomPropIndex().forEach((item)=>{
+    if (item.href){if(item.href.indexOf(window.location.origin)=== 0){styleSheets.push(item)}}});
+    styleSheets.forEach((item)=>{
+      for(var i in item.cssRules){
+        if(item.cssRules[i].type === 1){
+          if(typeof(item.cssRules[i]) != "undefined" ){
+
+            var beforeSplit =item.cssRules[i].style.cssText.split(';')
+            if(item.cssRules[i].style.cssText.indexOf("important")>0){
+            for(var j=0;j<beforeSplit.length;j++){
+              if (beforeSplit[j].indexOf('important') > 0){
+                Nstylenode.push(beforeSplit[j].split(':')[0].trim().toString())
+              }
+            }
+            cssRule.push([item.cssRules[i].selectorText.trim(),Nstylenode])
+            node=[];Nstylenode=[];
+            }
+          }
+        }
+      }  
+    });
+    await localStorage.setItem("CssRules",JSON.stringify(cssRule))
+  }
+  
+  const delay = ms => new Promise(res => setTimeout(res, ms));
+  editor.on('load',async()=>{
+        await delay(1000);
+        await getNode(document.querySelector('iframe').contentWindow.document)
+  }); 
+
     </script>
   </body>
 </html>

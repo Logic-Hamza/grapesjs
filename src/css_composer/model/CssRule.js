@@ -125,11 +125,49 @@ export default Backbone.Model.extend(Styleable).extend({
    * @param {Object} [opts={}] Options
    * @return {string}
    */
+
+  getNode(sel, properties) {
+    var StyleSheet = JSON.parse(localStorage.getItem('CssRules'));
+    if (StyleSheet) {
+      var SameProperties = [];
+      var StyleNode = [];
+      properties.split(';').forEach(e => {
+        SameProperties.push(e.split(':'));
+      });
+      let IsSelector = false;
+      StyleSheet.forEach(item => {
+        if (sel.indexOf(item[0]) > 0) {
+          if (properties != '') {
+            if (item[1].length > 0) {
+              IsSelector = true;
+              SameProperties.forEach(StyleItem => {
+                if (StyleItem != '') {
+                  if (item[1].indexOf(StyleItem[0]) > -1) {
+                    StyleNode.push(StyleItem.join(':') + ' !important');
+                  }
+                  // else{
+                  //   StyleNode.push(StyleItem.join(":"))
+                  // }
+                }
+              });
+            }
+          }
+        }
+      });
+      if (IsSelector) {
+        return StyleNode.join(';');
+      } else {
+        return properties;
+      }
+    }
+    return properties;
+  },
+
   getDeclaration(opts = {}) {
     let result = '';
     const selectors = this.selectorsToString(opts);
-    const style = this.styleToString(opts);
     const singleAtRule = this.get('singleAtRule');
+    const style = this.getNode(selectors, this.styleToString(opts));
 
     if ((selectors || singleAtRule) && style) {
       result = singleAtRule ? style : `${selectors}{${style}}`;
