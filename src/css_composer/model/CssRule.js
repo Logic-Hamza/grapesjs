@@ -127,27 +127,31 @@ export default Backbone.Model.extend(Styleable).extend({
    */
 
   getNode(sel, properties) {
+    console.log(sel);
     var StyleSheet = JSON.parse(localStorage.getItem('CssRules'));
     if (StyleSheet) {
       var SameProperties = [];
       var StyleNode = [];
+      var isNode = false;
       properties.split(';').forEach(e => {
-        SameProperties.push(e.split(':'));
+        if (e.split(':') != '') {
+          SameProperties.push(e.split(':'));
+        }
       });
       let IsSelector = false;
       StyleSheet.forEach(item => {
         if (sel.indexOf(item[0]) > 0) {
-          if (properties != '') {
+          if (properties != '' && !isNode) {
             if (item[1].length > 0) {
               IsSelector = true;
               SameProperties.forEach(StyleItem => {
                 if (StyleItem != '') {
                   if (item[1].indexOf(StyleItem[0]) > -1) {
                     StyleNode.push(StyleItem.join(':') + ' !important');
+                  } else {
+                    StyleNode.push(StyleItem.join(':'));
                   }
-                  // else{
-                  //   StyleNode.push(StyleItem.join(":"))
-                  // }
+                  isNode = true;
                 }
               });
             }

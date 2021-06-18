@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>GrapesJS</title>
     <link rel="stylesheet" href="dist/css/grapes.min.css">
+    <link rel="stylesheet" href="./dist/Font-Awesome-4.7.0/css/font-awesome.css">
     <script src="dist/grapes.min.js"></script>
     <style>
       body,
@@ -11,11 +12,13 @@
         height: 100%;
         margin: 0;
       }
+      .gjs-pn-panel{
+   
+      }
     </style>
   </head>
 
   <body>
-    
     <div id="gjs" style="height:0px; overflow:hidden;">
     
   
@@ -72,22 +75,41 @@
           </ul>
         </div>
       </div>
-
-
-
     </div>
+
+   
+  
 
     <script type="text/javascript">
       var editor = grapesjs.init({
         showOffsets: 1,
+        avoidInlineStyle: 1,
         noticeOnUnload: 0,
         container: '#gjs',
         height: '100%',
         fromElement: true,
-        storageManager: { autoload: 0 },
+        storageManager: { autoload: 0 }, 
+        pageManager: {
+        pages: [{
+            id: 'page-1',
+            name: 'Page 1',
+            component: '<div id="comp1">Page 1</div>',
+            styles: `#comp1 { color: red }`,
+        }, {
+            id: 'page-2',
+            name: 'Page 2',
+            component: '<div id="comp2">Page 2</div>',
+            styles: `#comp2 { color: green }`,
+        }, {
+            id: 'page-3',
+            name: 'Page 3',
+            component: '<div id="comp3">Page 3</div>',
+            styles: `#comp3 { color: blue }`,
+        }]
+        },
         canvas: {
         styles: [
-        './bootstrap.css'
+        './bootstrap.css',
         ],
         scripts: [
           'https://code.jquery.com/jquery-3.3.1.slim.min.js',
@@ -96,7 +118,9 @@
         ],
       },
       styleManager : {
-          sectors: [{
+        clearProperties:1,
+          sectors: [
+            {
               name: 'General',
               open: false,
               buildProps: ['float', 'display', 'position', 'top', 'right', 'left', 'bottom']
@@ -122,6 +146,7 @@
               buildProps: ['transition', 'perspective', 'transform'],
             }
           ],
+          
         },
       });
 
@@ -136,16 +161,17 @@
           if(typeof(item.cssRules[i]) != "undefined" ){
 
             var beforeSplit =item.cssRules[i].style.cssText.split(';')
-            if(item.cssRules[i].style.cssText.indexOf("important")>0){
+            // if(item.cssRules[i].style.cssText.indexOf("important")>0){
             for(var j=0;j<beforeSplit.length;j++){
-              if (beforeSplit[j].indexOf('important') > 0){
+              // if (beforeSplit[j].indexOf('important') > 0){
                 Nstylenode.push(beforeSplit[j].split(':')[0].trim().toString())
-              }
+              // }
             }
+            console.log(item.cssRules[i].selectorText.trim())
             cssRule.push([item.cssRules[i].selectorText.trim(),Nstylenode])
             node=[];Nstylenode=[];
             }
-          }
+          // }
         }
       }  
     });
@@ -155,9 +181,94 @@
   const delay = ms => new Promise(res => setTimeout(res, ms));
   editor.on('load',async()=>{
         await delay(1000);
-        await getNode(document.querySelector('iframe').contentWindow.document)
-  }); 
+        await getNode(editor.Canvas.getFrameEl().contentWindow.document);
 
-    </script>
-  </body>
+  await editor.Panels.addPanel({
+  id: 'basic-actions',
+  el: ".gjs-sm-sectors",
+  buttons: [
+    {
+      id: 'visibility',
+      active: true, // active by default
+      className: 'btn-toggle-borders',
+      label: '<u>B</u>',
+      command: 'sw-visibility', // Built-in command
+    }, {
+      id: 'export',
+      className: 'btn-open-export',
+      label: 'Exp',
+      command: 'export-template',
+      context: 'export-template', // For grouping context of buttons from the same panel
+    }, {
+      id: 'show-json',
+      className: 'btn-show-json',
+      label: 'JSON',
+      context: 'show-json',
+      command(editor) {
+        editor.Modal.setTitle('Components JSON')
+          .setContent(`<textarea style="width:100%; height: 250px;">
+            ${JSON.stringify(editor.getComponents())}
+          </textarea>`)
+          .open();
+      },
+    }
+  ],
+});
+
+
+
+
+
+  });
+  editor.addComponents(
+'<nav class="navbar navbar-expand-lg navbar-light bg-light">\
+  <div class="container-fluid">\
+    <a class="navbar-brand" href="#">Navbar</a>\
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" \
+    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"\
+    aria-expanded="false" aria-label="Toggle navigation">\
+      <span class="navbar-toggler-icon"></span>\
+    </button>\
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">\
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">\
+        <li class="nav-item">\
+          <a class="nav-link active" aria-current="page" href="#">Home</a>\
+        </li>\
+        <li class="nav-item">\
+          <a class="nav-link" href="#">Link</a>\
+        </li>\
+        <li class="nav-item dropdown">\
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" \
+          role="button" data-bs-toggle="dropdown" aria-expanded="false">\
+            Dropdown\
+          </a>\
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">\
+            <li><a class="dropdown-item" href="#">Action</a></li>\
+            <li><a class="dropdown-item" href="#">Another action</a></li>\
+            <li><hr class="dropdown-divider"></li>\
+            <li><a class="dropdown-item" href="#">Something else here</a></li>\
+          </ul>\
+        </li>\
+        <li class="nav-item">\
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>\
+        </li>\
+      </ul>\
+      <form class="d-flex">\
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">\
+        <button class="btn btn-outline-success" type="submit">Search</button>\
+      </form>\
+    </div>\
+  </div>\
+</nav>'
+);
+
+
+
+editor.Panels.addButton('options', 
+[ { id: 'save', className: 'fa fa-floppy-o icon-blank', 
+command: function(editor1, sender) { alert('Hello World') }, 
+attributes: { title: 'Save Template' } }, ]);
+
+</script>
+</body>
 </html>
